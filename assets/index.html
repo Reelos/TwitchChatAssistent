@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <meta charset="UTF-8">
+        <meta name="viewpoint" content="width=device-width, inital-scale= 1.0">
+        <title>
+            Twitch Ping Bot Configuration Page
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="formdiv">
+            <form id="settings">
+                <h1>Settings</h1>
+                <label form="settings">Channel: 
+                    <input id="channel" name="channel" type="text" value="">
+                </label><br>
+                <button id="save" type="button">Sichern</button>
+            </form>
+        </div>
+        <script>
+            getSettings();
+            document.querySelector("#save").onclick = sendInput;
+
+            function getSettings() {
+                $.get("/settings", function(result) {
+                    if(result) {
+                        document.getElementById("channel").value = result.Channel;
+                    }
+                },"json");
+            }
+
+            function sendInput() {
+                let dataObject = {
+                    Channel: '',
+                }
+
+                dataObject.Channel = document.getElementById("channel").value;
+
+                $.ajax({
+                    url: "/settings",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(dataObject)
+                }).done(data => {
+                    // success
+                }).fail(() => {
+                    // failed
+                }).always(() => {
+                    // always
+                });
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,7 @@
+.git/*
+_versions/*
+build/*
+node_modules/*
+*.js
+*.json
+!package.json

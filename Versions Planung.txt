@@ -1,0 +1,78 @@
+--- v1.0.0 - Basis Funktionen
+    Settings Speichern
+    Webservice für Einstellungen
+        Eingabe des Channels zu dem verbunden werden soll
+    Leseverbindung zum Twitchchat
+        New Message Event Abfangen
+    Ausgabe eines Akustischen Singales bei neuer Nachricht
+
+--- v1.1.0 - Sound Timeout
+    Eine Verzögerung für das Akustische Singales
+        Settings
+            um TimeoutTime erweitern
+        Webservice 
+            um Input für TimeoutTime erweitern
+            TimeoutTime an JSON Response Object senden
+        IRCWrapper
+            Event zum Abspielen des Singnales durch Timeout verzögern
+    Settings Update Prozess Implementieren
+        Alte Settings Version Ladbar halten
+        Alte Settings Version um Standardwert (5) für TimeoutTime erweitern
+
+--- v1.2.0 - MutedList
+    Liste bei der kein Sound abgespielt wird
+        Settings 
+            um MutedList erweitern
+        Webservice 
+            um TextBox für MutedList erweitern
+            MutedList in Array parsen => 1 Name pro Eintrag
+            MutedListArray an Response JSON Object senden
+        IRCWrapper
+            Event zum Abspielen des Signales überspringen wenn der Name auf der MutedList steht
+        Settings Update Prozess
+            Alte Settings Version um leeres Array für MutedList erweitern
+
+--- v1.3.0 - Sound auswahl
+    Ping Sound leichter anpassbar machen
+        Settings
+            um SelectedSound erweitern
+        Webservice
+            Alle im ./assets/ Ordner befindlichen sound files in ein Dropdown laden
+                mp3, mid, wav
+            Namen des Sounds an JSON Response Object senden
+        IRCWrapper
+            --
+        Settings Update Prozess
+            Alte Settings Version um "new_message.mp3" für SelectedSound erweitern
+
+--- v1.4.0 - Sound Bibliotek anpassen
+    Von Play-Sound auf Audic wechseln
+        Settings
+            --
+        Webservice
+            --
+        IRCWrapper
+            Von Play-Sound auf Audic wechseln
+        Settings Update Prozess
+            --
+    TypeScript Version 4.7 benötigt
+        Release am 24. Mai 2022
+
+--- v1.5.0 - More Events Update
+    Implementierung von weiteren Events auf die der Bot Reagieren kann
+        Settings
+            EventsList mit Sound Einstellungen
+        Webservice
+            Entsprechende Übertragung von Settings
+            Restrukturierung der Webansicht zur Inkrementellen Erweiterung für Events
+        IRCWrapper
+            Listener für die Möglichen Events einbauen
+        Settings Update Process
+            Laden und umwandeln alter Settings Daten
+            newMessage Event als Strandard und Vorlage für andere Events
+    Impementierung der Event Klasse
+        wird in der Settingsklasse verwendet
+        Namen eines Events
+        Sound Namen
+        Timeout
+        Boolean für Muted List
