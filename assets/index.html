@@ -7,7 +7,6 @@
         <title>
             Twitch Ping Bot Configuration Page
         </title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
         <div id="formdiv">
@@ -16,9 +15,14 @@
                 <label form="settings">Channel: 
                     <input id="channel" name="channel" type="text" value="">
                 </label><br>
+                <label form="settings">Port: 
+                    <input id="port" name="port" type="number" value="3000">
+                    <input hidden id="oldport" name="oldport" type="number" value="3000">
+                </label><br>
                 <button id="save" type="button">Sichern</button>
             </form>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
             getSettings();
             document.querySelector("#save").onclick = sendInput;
@@ -27,6 +31,8 @@
                 $.get("/settings", function(result) {
                     if(result) {
                         document.getElementById("channel").value = result.Channel;
+                        document.getElementById("port").value = result.Port;
+                        document.getElementById("oldport").value = result.Port;
                     }
                 },"json");
             }
@@ -34,9 +40,11 @@
             function sendInput() {
                 let dataObject = {
                     Channel: '',
+                    Port: 3000,
                 }
 
                 dataObject.Channel = document.getElementById("channel").value;
+                dataObject.Port = document.getElementById("port").value;
 
                 $.ajax({
                     url: "/settings",
@@ -45,6 +53,12 @@
                     data: JSON.stringify(dataObject)
                 }).done(data => {
                     // success
+                    if(document.getElementById("port").value != document.getElementById("oldport").value)
+                    {
+                        setTimeout( () => {
+                            window.location.replace(`http://localhost:${document.getElementById("port").value}`);
+                        }, 5000);
+                    }
                 }).fail(() => {
                     // failed
                 }).always(() => {

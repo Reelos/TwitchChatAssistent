@@ -1,13 +1,15 @@
 {
-  "name": "pingbot_v4",
-  "version": "1.0.0",
+  "name": "pingbot",
+  "version": "1.1.0",
   "description": "The Fourth itaration of a Ping Bot for Twitch Chat Messages",
   "main": "index.js",
   "bin": "index.js",
   "pkg": {
-    "scripts": "assets/scrips/*.js",
+    "scripts": "*.js",
     "assets": "assets/*",
-    "targets": [ "node16-win-x64" ],
+    "targets": [
+      "node16-win-x64"
+    ],
     "outputPath": "./build/"
   },
   "scripts": {
@@ -25,8 +27,9 @@
   "author": "reelos",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3",
+    "express": "^4.18.1",
     "fs": "^0.0.1-security",
+    "pkg": "^5.8.0",
     "play-sound": "^1.1.5",
     "tmi.js": "^1.8.5"
   },

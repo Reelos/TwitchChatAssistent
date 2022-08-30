@@ -1,7 +1,6 @@
 const tmi = require('tmi.js');
-import { Settings } from "./settings";
-
-const player = require("play-sound")();
+import type { Settings } from "./settings";
+const player = require("play-sound");
 
 export class IRCWrapper {
     settings: Settings;
@@ -9,8 +8,10 @@ export class IRCWrapper {
     app: any;
     client: any;
 
+
     constructor(settings: Settings) {
         this.settings = settings;
+        this.port = 3000;
         this.client = null;
 
         this.settings.addChangedEventFunction(this.initializeTwitchConnection.bind(this));
@@ -25,31 +26,32 @@ export class IRCWrapper {
             var opts = {
                 channels: [this.settings.Channel],
             }
-            console.log(`Channel: ${this.settings.Channel}`);
+            console.log(`${this.constructor.name}: Channel = ${this.settings.Channel}`);
 
             this.client = tmi.client(opts);
 
-            this.client.on("connected", this.onConnectedHandler);
+            this.client.on("connected", this.onConnectedHandler.bind(this));
             this.client.on("message", this.onMessageHandler.bind(this));
-            this.client.on("disconnected", this.onDisconnectedHandler);
+            this.client.on("disconnected", this.onDisconnectedHandler.bind(this));
 
             this.client.connect();
         }
     }
 
     onConnectedHandler(addr, port) {
-        console.log(`connection to Twitch Established via ${addr}:${port}`);
+        console.log(`${this.constructor.name}: connection to Twitch Chat "${this.settings.Channel}" Established via ${addr}:${port}`);
     }
 
-    onMessageHandler(target, context, msg, self) {
+    async onMessageHandler(_target, _context, _msg, self) {
         if(self) return;
         console.log("* new Message in Chat", this.settings.Channel);
-        player.play(process.cwd() + "/assets/new_message.mp3", (err) => {
-            if (err) console.log(`ERROR: unable to play sound ~ ${err}`);
+
+        player().play(process.cwd() + "/assets/new_message.mp3", (err) => {
+            if (err) console.log(`${this.constructor.name}: !!ERROR!! unable to play sound ~ ${err}`);
         });
     }
 
     onDisconnectedHandler(reason) {
-        console.log(`Disconnected from Twitch: ${reason}`);
+        console.log(`${this.constructor.name}: Disconnected from Twitch: ${reason}`);
     }
 }

@@ -1,34 +1,33 @@
-const fs = require ('fs');
+const fs = require('fs');
+const fileName = 'notifierSettings.json';
 
 export class Settings {
 
     //Username: string;
     //Password: string;
     Channel: string;
+    Port : number;
     eventFunctions: Function[];
 
     constructor() {
         //this.Username = '';
         //this.Password = '';
         this.Channel = '';
+        this.Port = 3000;
         this.eventFunctions = [];
 
         //this.tryLoadSettingsFile();
     }
 
     async tryLoadSettingsFile() {
-        await fs.readFile('settings.json', (err, data) => {
+        await fs.readFile(fileName, (err, data) => {
             if(err) {
                 //console.warn('warn:', err);
                 this.writeSettingsFile();
                 return;
             } else {
                 var read = data.toString('utf8');
-                var settings = JSON.parse(read);
-
-                //this.Username = settings.Username;
-                //this.Password = settings.Password;
-                this.Channel = settings.Channel;
+                this.setSettingsFromJSON(read);
                 this.invokeChangedEvent();
             }
         });
@@ -42,27 +41,55 @@ export class Settings {
         this.eventFunctions.forEach( event => event());
     }
 
+    protected removeVarsFromParse(key:string, value) {
+        let removeKeys = ["eventFunctions"];
+        for(let toRemove of removeKeys) {
+            if(toRemove == key){
+                return undefined;
+            }
+        }
+        return value;
+    }
+
     toJSONString(){
-        return JSON.stringify(this, null, 2);
+        return JSON.stringify(this, this.removeVarsFromParse, 2);
     }
 
     setSettingsFromJSON(jsonString: string) {
+        let oldFile = false;
         let settingsObject = JSON.parse(jsonString);
+
         this.Channel = settingsObject.Channel;
+        // Added Later
+        if(settingsObject.Port != undefined)
+        {
+            this.Port = settingsObject.Port;
+        }
+        else
+        {
+            oldFile = true;
+        }
+
+        if(oldFile)
+        {
+            this.writeSettingsFile(false);
+        }
     }
 
-    async writeSettingsFile() {
-        var settingsString = JSON.stringify(this, null, 2);
-        await fs.writeFile('settings.json', settingsString, (error) => {
+    async writeSettingsFile(invoke : boolean = true) {
+        let settingsString = this.toJSONString();
+        await fs.writeFile(fileName, settingsString, (error) => {
             if(error)
             {
-                console.error("An Error Occured");
+                console.error(`${this.constructor.name}: An Error Occured trying to write the Settings File.`);
                 console.error(`${error}`);
             }
             else
             {
-                console.log('the settings file was changed');
-                this.invokeChangedEvent();
+                console.log(`${this.constructor.name}: The Settings File was changed.`);
+                if(invoke) {
+                    this.invokeChangedEvent();
+                }
             }
         });
     }

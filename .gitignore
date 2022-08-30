@@ -1,7 +1,10 @@
 .git/*
 _versions/*
 build/*
+dist/*
 node_modules/*
 *.js
 *.json
 !package.json
+!tsconfig.json
+!settings.json

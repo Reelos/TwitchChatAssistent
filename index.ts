@@ -1,10 +1,10 @@
-import { Settings } from "./assets/classes/settings";
-import { IRCWrapper } from "./assets/classes/ircWrapper";
-import { WebserviceWrapper } from "./assets/classes/webserviceWrapper";
+import { Settings } from "./assets/classes/settings.js";
+import { IRCWrapper } from "./assets/classes/ircWrapper.js";
+import { WebserviceWrapper } from "./assets/classes/webserviceWrapper.js";
 
 //const ROOT_PATH : string = 
 
-class Main {
+export class Main {
     static settings : Settings;
     static ircWrapper : IRCWrapper;
     static webserviceWrapper : WebserviceWrapper;
