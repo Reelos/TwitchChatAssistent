@@ -22,6 +22,9 @@
                 <label form="settings">Timeout: 
                     <input id="soundTimeout" name="soundTimeout" type="number" value="5">
                 </label><br>
+                <label form="settings">MutedList: 
+                    <textarea id="mutedList" name="mutedList" rows="5" type="text" value=""></textarea>
+                </label><br>
                 <button id="save" type="button">Sichern</button>
             </form>
         </div>
@@ -37,6 +40,7 @@
                         document.getElementById("port").value = result.Port;
                         document.getElementById("oldport").value = result.Port;
                         document.getElementById("soundTimeout").value = result.SoundTimeout;
+                        document.getElementById("mutedList").value = result.MutedList.join(" ");
                     }
                 },"json");
             }
@@ -46,11 +50,16 @@
                     Channel: '',
                     Port: 3000,
                     SoundTimeout: 5,
+                    MutedList: [],
                 }
 
                 dataObject.Channel = document.getElementById("channel").value;
                 dataObject.Port = document.getElementById("port").value;
                 dataObject.SoundTimeout = document.getElementById("soundTimeout").value;
+                dataObject.MutedList = document.getElementById("mutedList").value.split(" ");
+                for(let i in dataObject.MutedList) {
+                    dataObject.MutedList[i] = dataObject.MutedList[i].toLowerCase().trim();
+                }
 
                 $.ajax({
                     url: "/settings",

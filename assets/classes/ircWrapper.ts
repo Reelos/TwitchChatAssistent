@@ -49,6 +49,11 @@ export class IRCWrapper {
 
     async onMessageHandler(_target, _context, _msg, self) {
         if(self) return;
+        if(this.settings.MutedList.includes(_context.username.toLowerCase())) {
+            //console.log(`${this.constructor.name}: User ${_context.username} is muted.`);
+            return;
+        }
+
         console.log("* new Message in Chat", this.settings.Channel);
 
         let diff  = Date.now() - this.lastSendSound;

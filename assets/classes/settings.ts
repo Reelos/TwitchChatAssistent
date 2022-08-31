@@ -11,6 +11,7 @@ export class Settings {
     Channel: string;
     Port : number;
     SoundTimeout: number;
+    MutedList: string[];
 
     eventFunctions: Function[];
     settingsFieldList: string[];
@@ -21,10 +22,11 @@ export class Settings {
         this.Channel = '';
         this.Port = 3000;
         this.SoundTimeout = 5;
+        this.MutedList = [];
 
         // ignored Field
         this.eventFunctions = [];
-        this.settingsFieldList = ["Channel", "Port", "SoundTimeout"]
+        this.settingsFieldList = ["Channel", "Port", "SoundTimeout", "MutedList"]
 
         //this.tryLoadSettingsFile();
     }
