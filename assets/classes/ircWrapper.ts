@@ -20,7 +20,7 @@ export class IRCWrapper {
     }
 
     initializeTwitchConnection() {
-        if(this.currentChannel != this.settings.Channel) {
+        if(this.currentChannel.toLowerCase().trim() !== this.settings.Channel.toLocaleLowerCase().trim()) {
             if(this.client != null) {
                 this.client.disconnect();
             }
@@ -29,6 +29,7 @@ export class IRCWrapper {
                 var opts = {
                     channels: [this.settings.Channel],
                 }
+                this.currentChannel = this.settings.Channel;
                 console.log(`${this.constructor.name}: Channel = ${this.settings.Channel}`);
 
                 this.client = tmi.client(opts);
