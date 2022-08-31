@@ -72,7 +72,7 @@ export class Settings {
         this.settingsFieldList.forEach((field) => {
             //console.log(`${this.constructor.name}: Check for Field - ${field}`);
             if(field in jsonRead) {
-                //console.log(`${this.constructor.name}: Set field ${field} from ${Reflect.get(this, field)} to ${Reflect.get(jsonRead, field)}`);
+                console.log(`${this.constructor.name}: ${field} = ${Reflect.get(jsonRead, field)}`);
                 Reflect.set(this, field, Reflect.get(jsonRead, field));
             } else {
                 result = true;
