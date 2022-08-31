@@ -1,3 +1,6 @@
+import { json } from "node:stream/consumers";
+import { resourceLimits } from "worker_threads";
+
 const fs = require('fs');
 const fileName = 'notifierSettings.json';
 
@@ -7,14 +10,21 @@ export class Settings {
     //Password: string;
     Channel: string;
     Port : number;
+    SoundTimeout: number;
+
     eventFunctions: Function[];
+    settingsFieldList: string[];
 
     constructor() {
         //this.Username = '';
         //this.Password = '';
         this.Channel = '';
         this.Port = 3000;
+        this.SoundTimeout = 5;
+
+        // ignored Field
         this.eventFunctions = [];
+        this.settingsFieldList = ["Channel", "Port", "SoundTimeout"]
 
         //this.tryLoadSettingsFile();
     }
@@ -42,7 +52,7 @@ export class Settings {
     }
 
     protected removeVarsFromParse(key:string, value) {
-        let removeKeys = ["eventFunctions"];
+        let removeKeys = ["eventFunctions", "settingsFieldList"];
         for(let toRemove of removeKeys) {
             if(toRemove == key){
                 return undefined;
@@ -51,28 +61,36 @@ export class Settings {
         return value;
     }
 
-    toJSONString(){
+    toJSONString() {
         return JSON.stringify(this, this.removeVarsFromParse, 2);
+    }
+
+    checkForOldFile(jsonRead :object) {
+        let result = false;
+        //console.log(`${this.constructor.name}: Check for Old File`);
+        //console.log(`${this.constructor.name}: File Data -`, jsonRead);
+        this.settingsFieldList.forEach((field) => {
+            //console.log(`${this.constructor.name}: Check for Field - ${field}`);
+            if(field in jsonRead) {
+                //console.log(`${this.constructor.name}: Set field ${field} from ${Reflect.get(this, field)} to ${Reflect.get(jsonRead, field)}`);
+                Reflect.set(this, field, Reflect.get(jsonRead, field));
+            } else {
+                result = true;
+            }
+        });
+        return result;
     }
 
     setSettingsFromJSON(jsonString: string) {
         let oldFile = false;
         let settingsObject = JSON.parse(jsonString);
 
-        this.Channel = settingsObject.Channel;
-        // Added Later
-        if(settingsObject.Port != undefined)
-        {
-            this.Port = settingsObject.Port;
-        }
-        else
-        {
-            oldFile = true;
-        }
+        oldFile = this.checkForOldFile(settingsObject);
 
         if(oldFile)
         {
             this.writeSettingsFile(false);
+            console.log(this.constructor.name, ": Old File Detected, Update by saving Base Values");
         }
     }
 

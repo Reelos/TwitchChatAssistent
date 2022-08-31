@@ -1,6 +1,6 @@
 {
   "name": "pingbot",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "The Fourth itaration of a Ping Bot for Twitch Chat Messages",
   "main": "index.js",
   "bin": "index.js",

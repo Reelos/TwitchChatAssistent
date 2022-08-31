@@ -30,8 +30,9 @@ export class WebserviceWrapper {
         // define base for requests
         this.app.post('/settings', (req,res) => {
             if(req.body.Channel){
-                this.settings.Channel = req.body.Channel;
-                this.settings.Port = req.body.Port;
+                this.settings.checkForOldFile(req.body);
+                //this.settings.Channel = req.body.Channel;
+                //this.settings.Port = req.body.Port;
                 this.settings.writeSettingsFile();
 
                 if(this.port != this.settings.Port) {

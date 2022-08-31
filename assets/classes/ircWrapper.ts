@@ -4,14 +4,14 @@ const player = require("play-sound");
 
 export class IRCWrapper {
     settings: Settings;
-    port: number;
+    lastSendSound: number;
     app: any;
     client: any;
 
 
     constructor(settings: Settings) {
         this.settings = settings;
-        this.port = 3000;
+        this.lastSendSound = Date.now();
         this.client = null;
 
         this.settings.addChangedEventFunction(this.initializeTwitchConnection.bind(this));
@@ -46,9 +46,20 @@ export class IRCWrapper {
         if(self) return;
         console.log("* new Message in Chat", this.settings.Channel);
 
-        player().play(process.cwd() + "/assets/new_message.mp3", (err) => {
-            if (err) console.log(`${this.constructor.name}: !!ERROR!! unable to play sound ~ ${err}`);
-        });
+        let diff  = Date.now() - this.lastSendSound;
+        let timeout = this.settings.SoundTimeout * 1000;
+
+        if(diff >= timeout) {
+            player().play(process.cwd() + "/assets/new_message.mp3", (err) => {
+                if (err) {
+                    console.log(`${this.constructor.name}: !!ERROR!! unable to play sound ~ ${err}`);
+                } else {
+                    this.lastSendSound = Date.now();
+                }
+            });
+        } else {
+            console.log("** timeout for next Sound", (timeout - diff) / 1000);
+        }
     }
 
     onDisconnectedHandler(reason) {

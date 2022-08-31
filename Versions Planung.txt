@@ -6,7 +6,19 @@
         New Message Event Abfangen
     Ausgabe eines Akustischen Singales bei neuer Nachricht
 
---- v1.1.0 - Sound Timeout
+--- v1.1.0 - Config Page Port Anpassung
+    Die Configpage auf einem anderen Port available machen
+        Settings
+            um Port Feld erweitern
+        Webservice
+            Neustart bei Port wechseln
+        IRCWrapper
+            ---
+    Settings Update Prozess Implementieren
+        Alte Settings Version Ladbar halten
+        Standardwert (3000) für Port Setzen
+
+--- v1.1.1 - Sound Timeout
     Eine Verzögerung für das Akustische Singales
         Settings
             um TimeoutTime erweitern
@@ -15,9 +27,8 @@
             TimeoutTime an JSON Response Object senden
         IRCWrapper
             Event zum Abspielen des Singnales durch Timeout verzögern
-    Settings Update Prozess Implementieren
-        Alte Settings Version Ladbar halten
-        Alte Settings Version um Standardwert (5) für TimeoutTime erweitern
+        Settings Update Prozess
+            Alte Settings Version um Standardwert (5) für TimeoutTime erweitern
 
 --- v1.2.0 - MutedList
     Liste bei der kein Sound abgespielt wird
