@@ -93,7 +93,7 @@ export class Settings {
 
         if(oldFile)
         {
-            console.log(this.constructor.name, ": Old File Detected, Update by saving Base Values");
+            console.log(`${this.constructor.name}: Old File Detected, Update by saving Base Values`);
             this.writeSettingsFile(false);
         }
     }
