@@ -52,11 +52,11 @@
                 mp3, mid, wav
             Namen des Sounds an JSON Response Object senden
         IRCWrapper
-            --
+            Sound aus den Settings Laden
         Settings Update Prozess
             Alte Settings Version um "new_message.mp3" für SelectedSound erweitern
 
---- v1.4.0 - Sound Bibliotek anpassen
+---  DEAD - Sound Bibliotek anpassen
     Von Play-Sound auf Audic wechseln
         Settings
             --
@@ -69,7 +69,7 @@
     TypeScript Version 4.7 benötigt
         Release am 24. Mai 2022
 
---- v1.5.0 - More Events Update
+--- v1.4.0 - More Events Update
     Implementierung von weiteren Events auf die der Bot Reagieren kann
         Settings
             EventsList mit Sound Einstellungen

@@ -56,15 +56,20 @@ export class IRCWrapper {
 
         console.log("* new Message in Chat", this.settings.Channel);
 
+        let pathToSoundFile = process.cwd() + "\\assets\\" + this.settings.SoundFile;
         let diff  = Date.now() - this.lastSendSound;
         let timeout = this.settings.SoundTimeout * 1000;
 
         if(diff >= timeout) {
-            player().play(process.cwd() + "/assets/new_message.mp3", (err) => {
-                if (err) {
+            let sound = player().play(pathToSoundFile, (err) => {
+                if (err && !err.killed) {
                     console.log(`${this.constructor.name}: !!ERROR!! unable to play sound ~ ${err}`);
                 }
             });
+
+            setTimeout(() => sound.kill(), 1000);
+            
+
             this.lastSendSound = Date.now();
         } else {
             console.log("** timeout for next Sound", (timeout - diff) / 1000);

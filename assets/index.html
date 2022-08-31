@@ -19,6 +19,10 @@
                     <input id="port" name="port" type="number" value="3000">
                     <input hidden id="oldport" name="oldport" type="number" value="3000">
                 </label><br>
+                <label form="settings">NotficationSound: 
+                    <select id="soundFile" name="soundFile">
+                    </select>
+                </label><br>
                 <label form="settings">Timeout: 
                     <input id="soundTimeout" name="soundTimeout" type="number" value="5">
                 </label><br>
@@ -30,6 +34,7 @@
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
+            getSoundFiles();
             getSettings();
             document.querySelector("#save").onclick = sendInput;
 
@@ -39,8 +44,23 @@
                         document.getElementById("channel").value = result.Channel;
                         document.getElementById("port").value = result.Port;
                         document.getElementById("oldport").value = result.Port;
+                        document.getElementById("soundFile").value = result.SoundFile;
                         document.getElementById("soundTimeout").value = result.SoundTimeout;
                         document.getElementById("mutedList").value = result.MutedList.join(" ");
+                    }
+                },"json");
+            }
+
+            function getSoundFiles() {
+                $.get("/sounds", function(result) {
+                    if(result) {
+                        //console.log(result);
+                        let values = "";
+                        result.forEach(file => {
+                            values += `<option value="${file}">${file}</option>\n`;
+                        });
+
+                        document.getElementById("soundFile").innerHTML = values;
                     }
                 },"json");
             }
@@ -49,12 +69,14 @@
                 let dataObject = {
                     Channel: '',
                     Port: 3000,
+                    SoundFile: "new_message.mp3",
                     SoundTimeout: 5,
                     MutedList: [],
                 }
 
                 dataObject.Channel = document.getElementById("channel").value;
                 dataObject.Port = document.getElementById("port").value;
+                dataObject.SoundFile = document.getElementById("soundFile").value;
                 dataObject.SoundTimeout = document.getElementById("soundTimeout").value;
                 dataObject.MutedList = document.getElementById("mutedList").value.split(" ");
                 for(let i in dataObject.MutedList) {

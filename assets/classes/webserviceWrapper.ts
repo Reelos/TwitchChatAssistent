@@ -1,7 +1,9 @@
 const express = require('express');
 import type { Settings } from "./settings";
 const path = require('path');
+const fs = require('fs');
 import {fileURLToPath} from 'url';
+import { Console } from "console";
 
 //const __filename = fileURLToPath(import.meta.url);
 //const __dirname = path.dirname(__filename);
@@ -47,6 +49,10 @@ export class WebserviceWrapper {
             res.end(this.settings.toJSONString());
         });
 
+        this.app.get('/sounds', (_req,res) => {
+            res.end(this.readAllAssetSoundFiles());
+        })
+
         this.app.get('/style.css', (_req,res) => {
             res.sendFile('./style.css', {root: __dirname +'/../'});
         });
@@ -54,6 +60,19 @@ export class WebserviceWrapper {
         this.app.get('/', (_req,res) => {
             res.sendFile('./index.html', {root: __dirname +'/../'});
         });
+    }
+
+    readAllAssetSoundFiles() {
+        let result : string[] = [];
+
+        result = fs.readdirSync(process.cwd() + "/assets/");
+        //console.log(`${this.constructor.name}: Found Files -`, result);
+
+        result = result.filter(file => file.endsWith(".wav") || file.endsWith(".mp3") || file.endsWith(".mid"));
+
+        //console.log(`${this.constructor.name}: Fitlered Files -`, result);
+
+        return JSON.stringify(result, null, 2);
     }
     
     startUpServer() {

@@ -10,6 +10,7 @@ export class Settings {
     //Password: string;
     Channel: string;
     Port : number;
+    SoundFile: string;
     SoundTimeout: number;
     MutedList: string[];
 
@@ -21,12 +22,13 @@ export class Settings {
         //this.Password = '';
         this.Channel = '';
         this.Port = 3000;
+        this.SoundFile = "new_message.mp3";
         this.SoundTimeout = 5;
         this.MutedList = [];
 
         // ignored Field
         this.eventFunctions = [];
-        this.settingsFieldList = ["Channel", "Port", "SoundTimeout", "MutedList"]
+        this.settingsFieldList = ["Channel", "Port", "SoundFile", "SoundTimeout", "MutedList"]
 
         //this.tryLoadSettingsFile();
     }
@@ -91,8 +93,8 @@ export class Settings {
 
         if(oldFile)
         {
-            this.writeSettingsFile(false);
             console.log(this.constructor.name, ": Old File Detected, Update by saving Base Values");
+            this.writeSettingsFile(false);
         }
     }
 
